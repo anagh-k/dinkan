@@ -59,7 +59,6 @@
             }
         }
 
-        /* Main container */
         .container {
             min-height: 100vh;
             display: flex;
@@ -70,7 +69,6 @@
             position: relative;
         }
 
-        /* Hero section */
         .hero {
             text-align: center;
             color: white;
@@ -168,84 +166,36 @@
             }
         }
 
-        /* Interactive cards */
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-            width: 100%;
-            max-width: 1200px;
+        /* Dinkan Image Styles */
+        .dinkan-image {
+            margin-top: 40px;
+            animation: fly-in 2s ease-out;
+            display: flex;
+            justify-content: center;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+        .dinkan-image img {
+            width: 300px;
+            max-width: 80vw;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.5));
+            transition: transform 0.5s ease;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            animation: slideIn 0.6s ease-out;
         }
 
-        .card:nth-child(1) {
-            animation-delay: 0.1s;
+        .dinkan-image img:hover {
+            transform: scale(1.1) rotate(5deg);
         }
 
-        .card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        @keyframes slideIn {
+        @keyframes fly-in {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(-50px) scale(0.5);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
-        }
-
-        .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .card:hover::before {
-            left: 100%;
-        }
-
-        .card h3 {
-            color: white;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .card p {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
         }
 
         /* Floating action button */
@@ -292,22 +242,6 @@
             font-weight: bold;
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .card {
-                padding: 20px;
-            }
-        }
-
         /* Loading animation */
         .loading {
             position: fixed;
@@ -348,6 +282,12 @@
                 visibility: hidden;
             }
         }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -363,12 +303,16 @@
             <h1>DINKAN</h1>
             <p>Experience the future of ANDI</p>
         </div>
+
+        <!-- Dinkan Image -->
+        <div class="dinkan-image">
+            <img src="images/dinkan-flying.png" alt="Dinkan Flying">
+        </div>
     </div>
 
     <div class="fab" onclick="scrollToTop()"></div>
 
     <script>
-        // Create floating particles
         function createParticles() {
             const particles = document.querySelector('.particles');
             const particleCount = 50;
@@ -384,7 +328,6 @@
             }
         }
 
-        // Scroll to top function
         function scrollToTop() {
             window.scrollTo({
                 top: 0,
@@ -392,78 +335,10 @@
             });
         }
 
-        // Add parallax effect to cards
-        function addParallaxEffect() {
-            const cards = document.querySelectorAll('.card');
-
-            window.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX / window.innerWidth;
-                const mouseY = e.clientY / window.innerHeight;
-
-                cards.forEach((card, index) => {
-                    const speed = (index + 1) * 0.5;
-                    const x = (mouseX - 0.5) * speed;
-                    const y = (mouseY - 0.5) * speed;
-
-                    card.style.transform = `translateX(${x}px) translateY(${y}px)`;
-                });
-            });
-        }
-
-        // Add click ripple effect
-        function addRippleEffect() {
-            const cards = document.querySelectorAll('.card');
-
-            cards.forEach(card => {
-                card.addEventListener('click', function (e) {
-                    const ripple = document.createElement('div');
-                    const rect = this.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    const x = e.clientX - rect.left - size / 2;
-                    const y = e.clientY - rect.top - size / 2;
-
-                    ripple.style.cssText = `
-                        position: absolute;
-                        width: ${size}px;
-                        height: ${size}px;
-                        left: ${x}px;
-                        top: ${y}px;
-                        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-                        border-radius: 50%;
-                        transform: scale(0);
-                        animation: ripple 0.6s ease-out;
-                        pointer-events: none;
-                    `;
-
-                    this.appendChild(ripple);
-
-                    setTimeout(() => {
-                        ripple.remove();
-                    }, 600);
-                });
-            });
-        }
-
-        // Add ripple keyframes
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(2);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Initialize everything
         document.addEventListener('DOMContentLoaded', function () {
             createParticles();
-            addParallaxEffect();
-            addRippleEffect();
         });
 
-        // Add scroll animations
         window.addEventListener('scroll', function () {
             const fab = document.querySelector('.fab');
             if (window.scrollY > 300) {
